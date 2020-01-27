@@ -1,0 +1,39 @@
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<style>
+    #app {
+        display: flex;
+        justify-content: space-around;
+    }
+ .demo {
+     width: 100px;
+     height: 100px;
+     background-color: gray;
+     display: flex;
+     justify-content: space-between;
+ }
+ .c1{
+     background: red;
+ }
+ .c2{
+    background-color: green;
+ } 
+ .c3{
+    background-color: blue;
+ }
+</style>
+<div id="app">
+   
+    <div class="demo" :class="{c1: aplicaC1}" @click="aplicaC1 = !aplicaC1"></div>
+    <div class="demo" :class="{c2: aplicaC2}" @click="aplicaC2 = !aplicaC2"></div>
+    <div class="demo" :class="{c3: aplicaC3}" @click="aplicaC3 = !aplicaC3"></div>
+</div>
+<script>
+new Vue({
+    el:"#app",
+    data:{
+       aplicaC1:false,
+       aplicaC2:false,
+       aplicaC3:false
+    }   
+})
+</script>
