@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="https://unpkg.com/vue"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-  <title>Document</title>
+  <title>Matador de Monstro</title>
 </head>
 
 <body>
@@ -18,76 +19,112 @@
     <div class="row bloco shadow p-3 mb-5 bg-white rounded">
       <div class="col-md-6 text-center">JOGADOR
         <div class="barra">
-          <div class="bar-porcentagem" :style="{'width':width_jogador+'%'}">{{ width }}%</div>
-        </div>
+          <div :class="{barPorcentagemCritico:critico_jogador, barPorcentagem:!critico_jogador}"
+            :style="{'width':width_jogador+'%'}"></div>
+        </div>{{ width_jogador }}%
       </div>
       <div class="col-md-6 text-center">MONSTRO
         <div class="barra">
-          <div class="bar-porcentagem" :style="{'width':width_monstro+'%'}">{{ width_monstro }}%</div>
-        </div>
+          <div class="" :class="{barPorcentagemCritico:critico_monstro, barPorcentagem:!critico_monstro}"
+            :style="{'width':width_monstro+'%'}"></div>
+        </div>{{ width_monstro }}%
+      </div>
+      <div class="row">
+        <template v-if="{}"></template>
       </div>
     </div>
-
+    <div class="shadow p-3 mb-5 bg-white rounded bloco text-center" v-if="game_over && game_start">
+      Vencedor: {{vencedor}}
+    </div>
     <div class="shadow p-3 mb-5 bg-white rounded text-center bloco">
-      <div class="form-group align-middle">
-        <button type="button" class="btn btn-danger" @click="atualizaBarra()">ATAQUE</button>
-        <button type="button" class="btn btn-warning">ATAQUE ESPECIAL</button>
-        <button type="button" class="btn btn-success">CURAR</button>
-        <button type="button" class="btn btn-secondary">DESISTIR</button>
+      <div class="form-group align-middle" v-if="!game_over">
+        <button type="button" class="btn btn-danger" @click="atacar(0)">ATAQUE</button>
+        <button type="button" class="btn btn-warning" @click="atacar(1)">ATAQUE ESPECIAL</button>
+        <template>
+          <button type="button" class="btn btn-success" v-if="game_start" @click="curar(3)">CURAR</button>
+        </template>
+        <button type="button" class="btn btn-secondary" @click="game_over = true">DESISTIR</button>
+      </div>
+
+      <div class="form-group align-middle" v-else>
+        <button type="button" class="btn btn-info" @click="iniciar()">{{game_over && game_start ? 'JOGAR NOVAMENTE' : 'INICIAL JOGO'}}</button>
       </div>
     </div>
 
-    <div class="shadow p-3 mb-5 bg-white rounded bloco">
+    <div class="shadow p-3 mb-5 bg-white rounded bloco" v-if="game_start">
+      <template v-for="(valores, indice) in historico">
 
-      <span class="log log-jogador d-block p-2  text-white">jogador atingiu monstro com </span>
-      <span class="log log-monstro d-block p-2 text-white">monstro atingiu jogador com </span>
+        <span v-if="valores.atacante == 1" class="log text-white bg-warning d-block" :key="indice"> {{valores.acao}}
+        </span>
+        <span v-else-if="valores.atacante == 3" class="log bg-success text-white d-block" :key="indice"> {{valores.acao}} </span>
+        <span v-else-if="valores.atacante == 4" class="log bg-secondary text-white d-block" :key="indice"> {{valores.acao}} </span>
+        <span v-else class="log bg-info d-block" :key="indice"> {{valores.acao}} </span>
+      </template>
 
     </div>
 
- 
-</div>
+  </div>
 
-<script src="app.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="app.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script>
 
 
-<style>
-.barra {
-  border:1px solid #ecb4b4;
-  background-color: #f3efef;
-  color:#FFF;
-  font-weight: 700;
-}
-.bar-porcentagem {
-  width: 0%;
-  background-color:  #4cd347;
-}
-.log {
+  <style>
 
- margin: 1px 0 1px 0;
- color: #FFF;
- font-weight: 700;
- text-transform: uppercase;
- text-align: center;
-}
-.log-monstro{
-background-color: red;
-}
-.log-jogador{
-  background-color: royalblue;
+    .barra {
+      border: 1px solid #232522;
+      color: #FFF;
+      font-weight: 700;
+    }
 
-}
-.bloco {
-  margin-top: 30px;
-  padding:  10px;
-}
+    .barPorcentagem {
+     
+      height: 40px;
+      background-color: #5eff00;
+    }
 
-.form-group{
-  padding-top: 15px;
-}
-</style>
+    .barPorcentagemCritico {
+      
+      height: 40px;
+      background-color: #ff1100;
+    }
+
+    .log {
+      margin: 2px 0 2px 0;
+      color: #69d5e8;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+      border-radius: 20px;
+    }
+
+    .log-monstro {
+      background-color: #ec7d7d;
+    }
+
+    .log-jogador {
+      background-color: #899dd8;
+
+    }
+
+    .bloco {
+      margin-top: 30px;
+      padding: 10px;
+      text-transform: uppercase;
+    }
+
+    .form-group {
+      padding-top: 15px;
+    }
+  </style>
 </body>
 
 </html>
