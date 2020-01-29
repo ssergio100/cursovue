@@ -18,12 +18,12 @@
     <div class="row bloco shadow p-3 mb-5 bg-white rounded">
       <div class="col-md-6 text-center">JOGADOR
         <div class="barra">
-          <div class="bar-porcentagem" :style="{width}">50%</div>
+          <div class="bar-porcentagem" :style="{'width':width_jogador+'%'}">{{ width }}%</div>
         </div>
       </div>
       <div class="col-md-6 text-center">MONSTRO
         <div class="barra">
-          <div class="bar-porcentagem">50%</div>
+          <div class="bar-porcentagem" :style="{'width':width_monstro+'%'}">{{ width_monstro }}%</div>
         </div>
       </div>
     </div>
